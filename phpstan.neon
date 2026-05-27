@@ -1,5 +1,6 @@
 includes:
     - vendor/larastan/larastan/extension.neon
+    - vendor/phpstan/phpstan-mockery/extension.neon
 
 parameters:
     level: 8
@@ -8,11 +9,4 @@ parameters:
         - tests
     excludePaths:
         - vendor
-    ignoreErrors:
-        # Mockery's ->shouldReceive() returns a union (ExpectationInterface|HigherOrderMessage)
-        # whose methods PHPStan cannot fully narrow. Acceptable in tests only.
-        -
-            message: '#Call to an undefined method Mockery\\#'
-            paths:
-                - tests/*
     tmpDir: .phpstan.cache

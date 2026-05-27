@@ -43,7 +43,7 @@ abstract class TestCase extends Orchestra
      * Binds a Mockery mock as the 'modules' service so the nwidart Module
      * facade resolves through the container without needing its provider.
      *
-     * @param  callable(MockInterface): void  $configure
+     * @param  callable(MockInterface): mixed  $configure
      */
     protected function fakeModules(callable $configure): void
     {

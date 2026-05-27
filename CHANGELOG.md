@@ -65,7 +65,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - `R6` (`AggregateRootRepositoriesRule`) — warning when a `*RepositoryInterface` exists for a class whose name ends in a typical child-entity suffix (`Item`, `Line`, `Detail`, `Entry`, `Position`, `Step`).
 - `LaravelModulesArch\Analysis` namespace with the supporting machinery: `Severity` enum, `RuleResult`, `ImportStatement`, `ModuleFile` DTOs, `AnalysisContext`, `ImportExtractor` (nikic/php-parser based; supports both `use Foo\Bar;` and `use Foo\{Bar, Baz};` group syntax), `ModuleScanner` (Symfony Finder, layer detection), `Rule` interface, `RuleRegistry` (config-driven enablement), `BoundaryAnalyzer` (orchestrator).
 
+### Added — Increment 7 (Testing Utilities)
+- `LaravelModulesArch\Testing\IsolatedModuleTest` — abstract Testbench test case that disables every module not in `$enabledModules` during setUp and restores the previous state on tearDown. No-op when the nwidart `modules` binding isn't present.
+- `LaravelModulesArch\Testing\ModuleIsolation` — pure-PHP helper (apply + restore) that does the actual enable/disable dance. Extracted out of `IsolatedModuleTest` so it's unit-testable without booting a TestCase.
+- `LaravelModulesArch\Testing\Concerns\MocksCrossModuleActions` — trait with `fakeCrossModule(module, action, returnValue)` that simultaneously marks the target module as enabled and binds a stub action returning `$returnValue` from `handle()`.
+- `LaravelModulesArch\Testing\Concerns\AssertsModuleBoundaries` — trait with `assertModuleHasNoBoundaryErrors(?module)` that runs `BoundaryAnalyzer` programmatically and fails the test (with grouped output) on any R1-R5 error. Warnings (R6) are tolerated.
+
 ### Changed
 - PHPStan invocation uses `--memory-limit=1G` (the default 128M blew up while booting Larastan).
 - `composer.json` requires `justinrainbow/json-schema ^5.3|^6.0` and `nikic/php-parser ^5.0`.
+- `composer.json` (dev) now requires `phpstan/phpstan-mockery ^2.0` for proper typing of `Mockery::mock(InterfaceName::class)`.
 - Module `ServiceProvider` stub now ships with `// @arch-bindings-start` / `// @arch-bindings-end` markers so `arch:make-repository` can inject bindings deterministically, AND `// @arch-listeners-start` / `// @arch-listeners-end` markers for `arch:make-acl-listener`.
+- `TestCase::fakeModules()` callable signature widened to `callable(MockInterface): mixed` so arrow functions with implicit return work without an explicit `void` cast.
