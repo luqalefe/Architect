@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Domain\Events;
+
+/**
+ * Domain Event: {{ NAME }}
+ *
+ * A fact that happened inside the {{ MODULE }} bounded context — INTERNAL to
+ * this module. Does not implement Illuminate event contracts on purpose.
+ *
+ * Other modules MUST NOT listen to this event. For cross-module communication,
+ * publish an Integration Event under Contracts/Events/ instead.
+ *
+ * @see "Implementing DDD" (Vernon), Cap. 8 — Domain Events
+ */
+final readonly class {{ NAME }}
+{
+    public function __construct(
+        // TODO: add event payload (primitives only)
+    ) {}
+}

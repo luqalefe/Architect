@@ -1,0 +1,53 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Infrastructure\Persistence\Repositories;
+
+use {{ NAMESPACE }}\Domain\Entities\{{ NAME }} as {{ NAME }}Entity;
+use {{ NAMESPACE }}\Domain\Repositories\{{ NAME }}RepositoryInterface;
+use {{ NAMESPACE }}\Infrastructure\Persistence\Models\{{ NAME }} as {{ NAME }}Model;
+
+/**
+ * Eloquent implementation of {@see {{ NAME }}RepositoryInterface}.
+ *
+ * Translates between the domain entity and the Eloquent model. If the ORM
+ * is replaced, only this class needs to change.
+ */
+final class Eloquent{{ NAME }}Repository implements {{ NAME }}RepositoryInterface
+{
+    public function findById(string $id): ?{{ NAME }}Entity
+    {
+        $model = {{ NAME }}Model::find($id);
+
+        return $model ? $this->toDomainEntity($model) : null;
+    }
+
+    public function save({{ NAME }}Entity $entity): void
+    {
+        {{ NAME }}Model::updateOrCreate(
+            ['id' => $entity->id()],
+            $this->toModelAttributes($entity),
+        );
+    }
+
+    public function delete(string $id): void
+    {
+        {{ NAME }}Model::destroy($id);
+    }
+
+    private function toDomainEntity({{ NAME }}Model $model): {{ NAME }}Entity
+    {
+        // TODO: hydrate the entity from the model attributes
+        return new {{ NAME }}Entity(id: (string) $model->id);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function toModelAttributes({{ NAME }}Entity $entity): array
+    {
+        // TODO: project entity state to model column values
+        return ['id' => $entity->id()];
+    }
+}

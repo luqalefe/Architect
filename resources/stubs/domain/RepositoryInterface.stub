@@ -1,0 +1,24 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Domain\Repositories;
+
+use {{ NAMESPACE }}\Domain\Entities\{{ NAME }};
+
+/**
+ * Persistence contract for {{ NAME }}.
+ *
+ * The interface lives in Domain. The concrete implementation (Eloquent,
+ * Doctrine, REST API, …) lives in Infrastructure.
+ *
+ * @see "Domain-Driven Design" (Evans), Cap. 6 — Repositories
+ */
+interface {{ NAME }}RepositoryInterface
+{
+    public function findById(string $id): ?{{ NAME }};
+
+    public function save({{ NAME }} $entity): void;
+
+    public function delete(string $id): void;
+}

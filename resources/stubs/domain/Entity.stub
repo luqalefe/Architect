@@ -1,0 +1,50 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Domain\Entities;
+
+/**
+ * Domain Entity: {{ NAME }}
+ *
+ * Encapsulates pure business rules — does not import anything from Illuminate.
+ * Persistence is the Repository's job (Infrastructure layer).
+ *
+ * @see "Domain-Driven Design" (Evans), Cap. 5 — Entities
+ */
+final class {{ NAME }}
+{
+    /** @var array<int, object> */
+    private array $domainEvents = [];
+
+    public function __construct(
+        private readonly string $id,
+        // TODO: declare domain properties
+    ) {}
+
+    public function id(): string
+    {
+        return $this->id;
+    }
+
+    /**
+     * Append a domain event. Domain methods that mutate the entity should
+     * record an event here instead of dispatching directly — the Application
+     * layer drains the queue after persistence.
+     */
+    private function recordEvent(object $event): void
+    {
+        $this->domainEvents[] = $event;
+    }
+
+    /**
+     * @return array<int, object>
+     */
+    public function pullDomainEvents(): array
+    {
+        $events = $this->domainEvents;
+        $this->domainEvents = [];
+
+        return $events;
+    }
+}

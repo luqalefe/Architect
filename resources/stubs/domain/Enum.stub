@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Domain\Enums;
+
+/**
+ * Domain Enum: {{ NAME }}
+ *
+ * Finite domain state with valid transitions declared on the enum itself.
+ *
+ * @see "Laravel Beyond CRUD" (Spatie), Cap. 6 — The State Pattern
+ */
+enum {{ NAME }}: string
+{
+    case Draft = 'draft';
+    // TODO: declare additional cases
+
+    public function canTransitionTo(self $target): bool
+    {
+        return match ($this) {
+            self::Draft => false,
+            // TODO: define valid transitions per state
+        };
+    }
+}

@@ -29,6 +29,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Module stubs under `resources/stubs/module/`: `module.json.stub`, `composer.json.stub`, `Infrastructure/Providers/ModuleServiceProvider.stub` (uses `RegistersModuleMorphMap`), `routes/web.php.stub`, `routes/api.php.stub`.
 - `TestCase::artisanPending()` — typed helper that narrows Laravel's `PendingCommand|int` artisan return.
 
+### Added — Increment 3 (Domain Generators)
+- `arch:make-entity {Module/Name}` — generates a `final` Domain Entity stub with `pullDomainEvents()` and a private `recordEvent()`.
+- `arch:make-value-object {Module/Name}` — generates an immutable `final readonly` Value Object skeleton with `equals()`.
+- `arch:make-enum {Module/Name}` — generates a backed enum with `canTransitionTo()` placeholder.
+- `arch:make-event {Module/Name}` — generates a Domain Event POPO (explicitly NOT an Illuminate event — Integration Events live in `Contracts/Events/`).
+- `arch:make-exception {Module/Name}` — generates a `final` Domain Exception extending `\DomainException` with a `because()` named constructor.
+- `arch:make-repository {Module/EntityName}` — generates BOTH a `Domain/Repositories/{Name}RepositoryInterface.php` AND an `Infrastructure/Persistence/Repositories/Eloquent{Name}Repository.php`, then auto-wires `$this->app->bind(Interface::class, Eloquent::class)` between the `// @arch-bindings-start` / `// @arch-bindings-end` markers in the module's ServiceProvider. Idempotent: re-running with `--force` does not duplicate the binding.
+- `LaravelModulesArch\Support\ModuleNaming::replacements()` — single source of truth for the `MODULE` / `NAME` / `NAMESPACE` / `NAMESPACE_JSON` / `ALIAS` / `DESCRIPTION` tokens used across every stub.
+- `LaravelModulesArch\Console\Concerns\ParsesModuleAndName` — shared trait that parses the `Module/Name` argument and emits consistent error messages.
+- `LaravelModulesArch\Console\Commands\AbstractMakeArtifactCommand` — base class for single-file generators; subclasses only declare `stubPath()`, `outputSubPath()`, `artifactKind()`.
+
 ### Changed
 - PHPStan invocation uses `--memory-limit=1G` (the default 128M blew up while booting Larastan).
 - `composer.json` requires `justinrainbow/json-schema ^5.3|^6.0`.
+- Module `ServiceProvider` stub now ships with `// @arch-bindings-start` / `// @arch-bindings-end` markers so `arch:make-repository` can inject bindings deterministically.

@@ -5,7 +5,13 @@ declare(strict_types=1);
 namespace LaravelModulesArch;
 
 use Illuminate\Support\ServiceProvider;
+use LaravelModulesArch\Console\Commands\MakeEntityCommand;
+use LaravelModulesArch\Console\Commands\MakeEnumCommand;
+use LaravelModulesArch\Console\Commands\MakeEventCommand;
+use LaravelModulesArch\Console\Commands\MakeExceptionCommand;
 use LaravelModulesArch\Console\Commands\MakeModuleCommand;
+use LaravelModulesArch\Console\Commands\MakeRepositoryCommand;
+use LaravelModulesArch\Console\Commands\MakeValueObjectCommand;
 
 class LaravelModulesArchServiceProvider extends ServiceProvider
 {
@@ -35,6 +41,12 @@ class LaravelModulesArchServiceProvider extends ServiceProvider
     {
         return [
             MakeModuleCommand::class,
+            MakeEntityCommand::class,
+            MakeValueObjectCommand::class,
+            MakeEnumCommand::class,
+            MakeEventCommand::class,
+            MakeExceptionCommand::class,
+            MakeRepositoryCommand::class,
         ];
     }
 }

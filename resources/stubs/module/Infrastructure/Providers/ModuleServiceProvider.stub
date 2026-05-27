@@ -14,7 +14,8 @@ class {{ NAME }}ServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        // Bind {{ NAME }} Repository interfaces to their concrete implementations here.
+        // @arch-bindings-start
+        // @arch-bindings-end
     }
 
     public function boot(): void

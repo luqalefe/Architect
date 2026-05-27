@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Domain\Exceptions;
+
+use DomainException;
+
+/**
+ * Domain Exception: {{ NAME }}
+ *
+ * Signals a business-rule violation, NOT a technical failure. Prefer named
+ * constructors over raw `new {{ NAME }}('message')` so the call site reads
+ * like the rule that was violated.
+ */
+final class {{ NAME }} extends DomainException
+{
+    public static function because(string $reason): self
+    {
+        return new self($reason);
+    }
+}

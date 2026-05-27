@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Domain\ValueObjects;
+
+use InvalidArgumentException;
+
+/**
+ * Value Object: {{ NAME }}
+ *
+ * Immutable — every transformation returns a new instance.
+ * No identity — two {{ NAME }} with the same attributes are equal.
+ *
+ * @see "Domain-Driven Design" (Evans), Cap. 6 — Value Objects
+ */
+final readonly class {{ NAME }}
+{
+    public function __construct(
+        // TODO: declare value attributes, e.g. private string $value
+    ) {
+        // TODO: enforce invariants here, throw InvalidArgumentException on violation
+    }
+
+    public function equals(self $other): bool
+    {
+        // TODO: compare value attributes explicitly, e.g. return $this->value === $other->value
+        return $this == $other;
+    }
+}
