@@ -60,7 +60,10 @@ trait AssertsModuleBoundaries
             ? array_values(array_filter($ignoredRaw, is_string(...)))
             : [];
 
-        $results = $analyzer->analyze($modulesPath, $registry->enabled($rulesConfig), $ignored, $module);
+        $mode = (string) config('modules-arch.default_mode', 'pragmatic');
+        $rules = $registry->enabled(RuleRegistry::resolveForMode($rulesConfig, $mode));
+
+        $results = $analyzer->analyze($modulesPath, $rules, $ignored, $module);
 
         return array_values(array_filter($results, static fn (RuleResult $r) => $r->isError()));
     }

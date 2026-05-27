@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaravelModulesArch\Analysis;
 
 use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\NodeTraverser;
@@ -13,9 +14,12 @@ use PhpParser\ParserFactory;
 use RuntimeException;
 
 /**
- * Extracts every `use` statement (single and grouped) from a PHP source file
- * using {@see ParserFactory}. The parser is the only way to do this
- * reliably — naive regexes break on heredocs, leading whitespace, etc.
+ * Extracts every namespace reference from a PHP source file: `use` statements
+ * (single and grouped) AND inline fully-qualified class names like
+ * `new \Modules\Crm\Domain\Entities\Lead()`. Without picking up the inline form,
+ * the boundary rules could be trivially bypassed by skipping the import.
+ *
+ * Uses {@see ParserFactory}; regex would break on heredocs, attributes, etc.
  */
 final class ImportExtractor
 {
@@ -44,14 +48,14 @@ final class ImportExtractor
             /** @var list<ImportStatement> */
             public array $imports = [];
 
+            /** @var array<string, true> Dedup index keyed by namespace string. */
+            private array $seen = [];
+
             public function enterNode(Node $node): null
             {
                 if ($node instanceof Use_) {
                     foreach ($node->uses as $use) {
-                        $this->imports[] = new ImportStatement(
-                            namespace: $use->name->toString(),
-                            line: $node->getStartLine(),
-                        );
+                        $this->record($use->name->toString(), $node->getStartLine());
                     }
 
                     return null;
@@ -60,14 +64,30 @@ final class ImportExtractor
                 if ($node instanceof GroupUse) {
                     $prefix = $node->prefix->toString();
                     foreach ($node->uses as $use) {
-                        $this->imports[] = new ImportStatement(
-                            namespace: $prefix.'\\'.$use->name->toString(),
-                            line: $node->getStartLine(),
-                        );
+                        $this->record($prefix.'\\'.$use->name->toString(), $node->getStartLine());
                     }
+
+                    return null;
+                }
+
+                // Inline fully-qualified names anywhere in code (instantiation,
+                // static call, type hint, attribute, etc.). PhpParser already
+                // tagged these as FullyQualified, so no resolver pass needed.
+                if ($node instanceof FullyQualified) {
+                    $this->record($node->toString(), $node->getStartLine());
                 }
 
                 return null;
+            }
+
+            private function record(string $namespace, int $line): void
+            {
+                if (isset($this->seen[$namespace])) {
+                    return;
+                }
+
+                $this->seen[$namespace] = true;
+                $this->imports[] = new ImportStatement(namespace: $namespace, line: $line);
             }
         };
 

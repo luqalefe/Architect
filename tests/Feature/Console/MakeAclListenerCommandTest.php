@@ -139,6 +139,25 @@ class MakeAclListenerCommandTest extends TestCase
         $this->assertFileDoesNotExist($this->modulesPath.'/Sale/Infrastructure/ACL/HandleLeadConverted.php');
     }
 
+    public function test_proceeds_when_domain_and_contract_events_share_a_name(): void
+    {
+        // Crm publishes an Integration Event named LeadConverted; internally, its
+        // Domain Event is also called LeadConverted (Sale/SaleOrderCompleted is the
+        // canonical example of this pattern). The same name in Domain/Events/ must
+        // not block another module from subscribing to the Contracts/Events/ one.
+        $this->files->ensureDirectoryExists($this->modulesPath.'/Crm/Domain/Events');
+        $this->files->put($this->modulesPath.'/Crm/Domain/Events/LeadConverted.php', '<?php // domain event');
+        $this->files->ensureDirectoryExists($this->modulesPath.'/Crm/Contracts/Events');
+        $this->files->put($this->modulesPath.'/Crm/Contracts/Events/LeadConverted.php', '<?php // integration event');
+
+        $this->artisanPending('arch:make-acl-listener', [
+            'name' => 'Sale/HandleLeadConverted',
+            '--for' => 'Crm/LeadConverted',
+        ])->assertSuccessful();
+
+        $this->assertFileExists($this->modulesPath.'/Sale/Infrastructure/ACL/HandleLeadConverted.php');
+    }
+
     public function test_fails_without_for_option(): void
     {
         $this->artisanPending('arch:make-acl-listener', ['name' => 'Sale/HandleLeadConverted'])->assertFailed();

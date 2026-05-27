@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use LaravelModulesArch\Relations\NullRelation;
+use LaravelModulesArch\Relations\NullSingularRelation;
 use LaravelModulesArch\Support\ModuleAwareRelation;
 use LaravelModulesArch\Tests\TestCase;
 use Mockery\MockInterface;
@@ -42,7 +43,7 @@ class ModuleAwareRelationTest extends TestCase
         $this->fakeModules(fn (MockInterface $m) => $m->shouldReceive('isEnabled')->with('Sale')->andReturn(false));
 
         $this->assertInstanceOf(
-            NullRelation::class,
+            NullSingularRelation::class,
             ModuleAwareRelation::hasOne(new ModuleAwareParent, 'Sale', ModuleAwareChild::class),
         );
     }
@@ -62,7 +63,7 @@ class ModuleAwareRelationTest extends TestCase
         $this->fakeModules(fn (MockInterface $m) => $m->shouldReceive('isEnabled')->with('Sale')->andReturn(false));
 
         $this->assertInstanceOf(
-            NullRelation::class,
+            NullSingularRelation::class,
             ModuleAwareRelation::belongsTo(new ModuleAwareChild, 'Sale', ModuleAwareParent::class),
         );
     }
@@ -102,7 +103,7 @@ class ModuleAwareRelationTest extends TestCase
         $this->fakeModules(fn (MockInterface $m) => $m->shouldReceive('isEnabled')->with('Account')->andReturn(false));
 
         $this->assertInstanceOf(
-            NullRelation::class,
+            NullSingularRelation::class,
             ModuleAwareRelation::morphOne(new ModuleAwareParent, 'Account', ModuleAwareChild::class, 'morphable'),
         );
     }
@@ -122,7 +123,7 @@ class ModuleAwareRelationTest extends TestCase
         $this->fakeModules(fn (MockInterface $m) => $m->shouldReceive('isEnabled')->with('Account')->andReturn(false));
 
         $this->assertInstanceOf(
-            NullRelation::class,
+            NullSingularRelation::class,
             ModuleAwareRelation::morphTo(new ModuleAwareChild, 'Account', 'morphable'),
         );
     }

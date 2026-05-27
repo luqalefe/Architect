@@ -7,17 +7,20 @@ namespace LaravelModulesArch\Support;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use LaravelModulesArch\Relations\NullRelation;
+use LaravelModulesArch\Relations\NullSingularRelation;
 use Nwidart\Modules\Facades\Module;
 use Throwable;
 
 /**
  * Builds an Eloquent relation that gracefully collapses to a {@see NullRelation}
- * when the target module is disabled (or not registered at all).
+ * (plural) or {@see NullSingularRelation} (singular) when the target module is
+ * disabled (or not registered at all).
  *
  * Encapsulates the recurring "if module enabled then hasMany else NullRelation"
  * pattern that would otherwise be repeated on every cross-module relationship.
  *
  * @see NullRelation
+ * @see NullSingularRelation
  */
 final class ModuleAwareRelation
 {
@@ -51,7 +54,7 @@ final class ModuleAwareRelation
         ?string $localKey = null,
     ): Relation {
         if (! self::moduleEnabled($module)) {
-            return new NullRelation($parent);
+            return new NullSingularRelation($parent);
         }
 
         return $parent->hasOne($related, $foreignKey, $localKey);
@@ -70,7 +73,7 @@ final class ModuleAwareRelation
         ?string $relation = null,
     ): Relation {
         if (! self::moduleEnabled($module)) {
-            return new NullRelation($parent);
+            return new NullSingularRelation($parent);
         }
 
         return $parent->belongsTo($related, $foreignKey, $ownerKey, $relation);
@@ -110,7 +113,7 @@ final class ModuleAwareRelation
         ?string $localKey = null,
     ): Relation {
         if (! self::moduleEnabled($module)) {
-            return new NullRelation($parent);
+            return new NullSingularRelation($parent);
         }
 
         return $parent->morphOne($related, $name, $type, $id, $localKey);
@@ -128,7 +131,7 @@ final class ModuleAwareRelation
         ?string $ownerKey = null,
     ): Relation {
         if (! self::moduleEnabled($module)) {
-            return new NullRelation($parent);
+            return new NullSingularRelation($parent);
         }
 
         return $parent->morphTo($name, $type, $id, $ownerKey);

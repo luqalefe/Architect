@@ -143,6 +143,42 @@ class CheckBoundariesCommandTest extends TestCase
         $this->artisanPending('arch:check-boundaries', ['--strict' => true])->assertExitCode(1);
     }
 
+    public function test_purist_mode_auto_enables_r4_even_when_config_says_false(): void
+    {
+        config(['modules-arch.default_mode' => 'purist']);
+        // application_no_infrastructure stays false (the broken-by-default value);
+        // the resolver must flip it on because we're in purist.
+
+        $this->artisanPending('arch:make-module', ['name' => 'Sale'])->assertSuccessful();
+
+        $this->files->ensureDirectoryExists($this->modulesPath.'/Sale/Application/Actions');
+        $this->files->put(
+            $this->modulesPath.'/Sale/Application/Actions/UsesInfra.php',
+            "<?php\nnamespace Modules\\Sale\\Application\\Actions;\nuse Modules\\Sale\\Infrastructure\\Models\\Order;\nfinal class UsesInfra {}\n",
+        );
+
+        $this->artisanPending('arch:check-boundaries', ['--strict' => true])
+            ->expectsOutputToContain('[R4]')
+            ->assertExitCode(1);
+    }
+
+    public function test_detects_r3_via_inline_fully_qualified_class_name(): void
+    {
+        // Without FQCN coverage, this Domain→Application import via inline FQCN
+        // would silently slip past boundary enforcement.
+        $this->artisanPending('arch:make-module', ['name' => 'Sale'])->assertSuccessful();
+
+        $this->files->ensureDirectoryExists($this->modulesPath.'/Sale/Domain/Services');
+        $this->files->put(
+            $this->modulesPath.'/Sale/Domain/Services/CheatingService.php',
+            "<?php\nnamespace Modules\\Sale\\Domain\\Services;\nfinal class CheatingService {\n    public function run(): void { new \\Modules\\Sale\\Application\\Actions\\DoIt(); }\n}\n",
+        );
+
+        $this->artisanPending('arch:check-boundaries', ['--strict' => true])
+            ->expectsOutputToContain('[R3]')
+            ->assertExitCode(1);
+    }
+
     public function test_detects_r5_when_listener_subscribes_to_undeclared_event(): void
     {
         $this->artisanPending('arch:make-module', ['name' => 'Sale'])->assertSuccessful();

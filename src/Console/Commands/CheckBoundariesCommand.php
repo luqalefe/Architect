@@ -43,7 +43,8 @@ class CheckBoundariesCommand extends Command
         /** @var list<string> $ignored */
         $ignored = is_array($ignoredRaw) ? array_values(array_filter($ignoredRaw, is_string(...))) : [];
 
-        $rules = $registry->enabled($rulesConfig);
+        $mode = (string) config('modules-arch.default_mode', 'pragmatic');
+        $rules = $registry->enabled(RuleRegistry::resolveForMode($rulesConfig, $mode));
 
         if (count($rules) === 0) {
             $this->components->warn('No boundary rules are enabled — nothing to check.');

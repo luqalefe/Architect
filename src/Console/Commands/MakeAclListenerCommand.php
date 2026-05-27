@@ -75,8 +75,14 @@ class MakeAclListenerCommand extends Command
             return self::FAILURE;
         }
 
+        $contractEventPath = $modulesPath.'/'.$forModule.'/Contracts/Events/'.$forEvent.'.php';
         $domainEventPath = $modulesPath.'/'.$forModule.'/Domain/Events/'.$forEvent.'.php';
-        if ($files->exists($domainEventPath)) {
+
+        // A Domain Event with the same name is allowed to coexist with the
+        // Contracts (Integration) Event — Sale/SaleOrderCompleted is the canonical
+        // example. Only refuse when the user is pointing at something that exists
+        // ONLY in Domain/Events/, with no Integration Event under Contracts/.
+        if (! $files->exists($contractEventPath) && $files->exists($domainEventPath)) {
             $this->components->error(
                 "{$forEvent} is a Domain Event (private to {$forModule}). ACL listeners must subscribe to ".
                 "Integration Events under {$forModule}/Contracts/Events/."

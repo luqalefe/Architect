@@ -66,4 +66,35 @@ class RuleRegistryTest extends TestCase
     {
         $this->assertSame([], (new RuleRegistry)->enabled([]));
     }
+
+    public function test_resolve_for_mode_forces_r4_on_in_purist(): void
+    {
+        $resolved = RuleRegistry::resolveForMode([
+            'cross_module_via_contracts' => true,
+            'application_no_infrastructure' => false,
+        ], 'purist');
+
+        $this->assertTrue($resolved['application_no_infrastructure']);
+        $this->assertTrue($resolved['cross_module_via_contracts']);
+    }
+
+    public function test_resolve_for_mode_leaves_config_alone_in_pragmatic(): void
+    {
+        $input = [
+            'cross_module_via_contracts' => true,
+            'application_no_infrastructure' => false,
+        ];
+
+        $this->assertSame($input, RuleRegistry::resolveForMode($input, 'pragmatic'));
+    }
+
+    public function test_purist_resolution_actually_enables_r4(): void
+    {
+        $rules = (new RuleRegistry)->enabled(RuleRegistry::resolveForMode([
+            'cross_module_via_contracts' => true,
+            'application_no_infrastructure' => false,
+        ], 'purist'));
+
+        $this->assertContains('R4', array_map(fn ($r) => $r->code(), $rules));
+    }
 }

@@ -43,4 +43,22 @@ final class RuleRegistry
 
         return $rules;
     }
+
+    /**
+     * Overlay the architectural mode onto the raw config: in 'purist' mode R4
+     * (Application cannot import Infrastructure) is force-enabled, matching the
+     * promise made in config/modules-arch.php. Caller-provided values for other
+     * rules are preserved verbatim.
+     *
+     * @param  array<string, bool>  $config
+     * @return array<string, bool>
+     */
+    public static function resolveForMode(array $config, string $mode): array
+    {
+        if ($mode === 'purist') {
+            $config['application_no_infrastructure'] = true;
+        }
+
+        return $config;
+    }
 }

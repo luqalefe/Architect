@@ -110,6 +110,54 @@ class ImportExtractorTest extends TestCase
         $this->extractor->extract('/no/such/file.php');
     }
 
+    public function test_extracts_inline_fully_qualified_class_names(): void
+    {
+        $file = $this->writeFile('Foo.php', <<<'PHP'
+            <?php
+
+            namespace Modules\Sale\Application\Actions;
+
+            class CreateOrder
+            {
+                public function run(): void
+                {
+                    $lead = new \Modules\Crm\Domain\Entities\Lead();
+                    \Modules\Crm\Infrastructure\Models\Repo::find(1);
+                }
+            }
+            PHP);
+
+        $namespaces = array_map(fn ($i) => $i->namespace, $this->extractor->extract($file));
+
+        $this->assertContains('Modules\\Crm\\Domain\\Entities\\Lead', $namespaces);
+        $this->assertContains('Modules\\Crm\\Infrastructure\\Models\\Repo', $namespaces);
+    }
+
+    public function test_dedupes_inline_fqcn_against_use_statement(): void
+    {
+        $file = $this->writeFile('Foo.php', <<<'PHP'
+            <?php
+
+            namespace Acme;
+
+            use Modules\Crm\Contracts\LeadService;
+
+            class Foo
+            {
+                public function run(): void
+                {
+                    \Modules\Crm\Contracts\LeadService::make();
+                    \Modules\Crm\Contracts\LeadService::make();
+                }
+            }
+            PHP);
+
+        $namespaces = array_map(fn ($i) => $i->namespace, $this->extractor->extract($file));
+
+        $matches = array_filter($namespaces, fn ($n) => $n === 'Modules\\Crm\\Contracts\\LeadService');
+        $this->assertCount(1, $matches);
+    }
+
     private function writeFile(string $name, string $contents): string
     {
         $path = $this->tempPath.'/'.$name;
