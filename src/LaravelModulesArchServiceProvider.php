@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaravelModulesArch;
 
 use Illuminate\Support\ServiceProvider;
+use LaravelModulesArch\Console\Commands\CheckBoundariesCommand;
 use LaravelModulesArch\Console\Commands\MakeAclListenerCommand;
 use LaravelModulesArch\Console\Commands\MakeActionCommand;
 use LaravelModulesArch\Console\Commands\MakeContractCommand;
@@ -63,6 +64,7 @@ class LaravelModulesArchServiceProvider extends ServiceProvider
             MakeContractCommand::class,
             MakeIntegrationEventCommand::class,
             MakeAclListenerCommand::class,
+            CheckBoundariesCommand::class,
         ];
     }
 }

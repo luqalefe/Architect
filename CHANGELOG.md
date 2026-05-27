@@ -55,7 +55,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - `LaravelModulesArch\Support\ManifestUpdateResult` — typed result with `wasAdded()` / `isValid()`.
 - `AbstractMakeArtifactCommand::manifestUpdate()` — hook for subclasses to declare a `[dotPath, entry]` tuple, automatically run after the file is generated.
 
+### Added — Increment 6 (Boundary Enforcement)
+- `arch:check-boundaries {--module=} {--strict}` — scans every module, runs every enabled rule (R1-R6) against every `.php` file, prints a grouped report and (with `--strict`) exits with code `1` when errors are present. Warnings never fail.
+- `R1` (`CrossModuleOnlyViaContractsRule`) — error when a file imports `Modules\Other\NotContracts\...`.
+- `R2` (`DomainCannotImportInfrastructureRule`) — error when `Domain/` imports `Modules\X\Infrastructure\...` or any `Illuminate\...` not in the `ignored_namespaces` allowlist.
+- `R3` (`DomainCannotImportApplicationRule`) — error when `Domain/` imports `Modules\X\Application\...`.
+- `R4` (`ApplicationCannotImportInfrastructureRule`) — error when `Application/` imports `Modules\X\Infrastructure\...`. Off by default (pragmatic mode); enable for purist projects.
+- `R5` (`DeclaredSubscriptionsRule`) — error when an ACL listener imports a `Modules\Other\Contracts\Events\...` that isn't declared in `module.json → events.subscribes`.
+- `R6` (`AggregateRootRepositoriesRule`) — warning when a `*RepositoryInterface` exists for a class whose name ends in a typical child-entity suffix (`Item`, `Line`, `Detail`, `Entry`, `Position`, `Step`).
+- `LaravelModulesArch\Analysis` namespace with the supporting machinery: `Severity` enum, `RuleResult`, `ImportStatement`, `ModuleFile` DTOs, `AnalysisContext`, `ImportExtractor` (nikic/php-parser based; supports both `use Foo\Bar;` and `use Foo\{Bar, Baz};` group syntax), `ModuleScanner` (Symfony Finder, layer detection), `Rule` interface, `RuleRegistry` (config-driven enablement), `BoundaryAnalyzer` (orchestrator).
+
 ### Changed
 - PHPStan invocation uses `--memory-limit=1G` (the default 128M blew up while booting Larastan).
-- `composer.json` requires `justinrainbow/json-schema ^5.3|^6.0`.
+- `composer.json` requires `justinrainbow/json-schema ^5.3|^6.0` and `nikic/php-parser ^5.0`.
 - Module `ServiceProvider` stub now ships with `// @arch-bindings-start` / `// @arch-bindings-end` markers so `arch:make-repository` can inject bindings deterministically, AND `// @arch-listeners-start` / `// @arch-listeners-end` markers for `arch:make-acl-listener`.
