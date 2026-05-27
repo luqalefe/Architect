@@ -1,0 +1,67 @@
+{
+    "name": "luq/laravel-modules-arch",
+    "description": "Domain-Driven Design enforcement and tooling for Laravel modules, built on top of nwidart/laravel-modules.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "ddd",
+        "domain-driven-design",
+        "modules",
+        "architecture",
+        "bounded-context"
+    ],
+    "authors": [
+        {
+            "name": "Lucas",
+            "email": "luqalefe@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/console": "^11.0|^12.0",
+        "illuminate/contracts": "^11.0|^12.0",
+        "illuminate/database": "^11.0|^12.0",
+        "illuminate/support": "^11.0|^12.0",
+        "nwidart/laravel-modules": "^11.0|^12.0"
+    },
+    "require-dev": {
+        "larastan/larastan": "^2.9|^3.0",
+        "laravel/pint": "^1.17",
+        "orchestra/testbench": "^9.0|^10.0",
+        "phpstan/phpstan": "^1.11|^2.0",
+        "phpunit/phpunit": "^10.5|^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaravelModulesArch\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaravelModulesArch\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LaravelModulesArch\\LaravelModulesArchServiceProvider"
+            ]
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "stan": "vendor/bin/phpstan analyse",
+        "format": "vendor/bin/pint",
+        "format:check": "vendor/bin/pint --test"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/installers": true,
+            "wikimedia/composer-merge-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
