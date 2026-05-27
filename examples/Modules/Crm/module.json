@@ -1,0 +1,23 @@
+{
+    "name": "Crm",
+    "alias": "crm",
+    "description": "Crm bounded context (example/minimal — publishes LeadConverted).",
+    "priority": 0,
+    "version": "1.0.0",
+    "providers": [
+        "Modules\\Crm\\Infrastructure\\Providers\\CrmServiceProvider"
+    ],
+    "contracts": {
+        "publishes": []
+    },
+    "events": {
+        "publishes": [
+            "Modules\\Crm\\Contracts\\Events\\LeadConverted"
+        ],
+        "subscribes": []
+    },
+    "dependencies": {
+        "required": [],
+        "optional": []
+    }
+}

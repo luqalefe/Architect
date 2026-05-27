@@ -1,0 +1,17 @@
+{
+    "name": "modules/crm",
+    "description": "Crm bounded context (example/minimal).",
+    "type": "laravel-module",
+    "autoload": {
+        "psr-4": {
+            "Modules\\Crm\\": ""
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Crm\\Infrastructure\\Providers\\CrmServiceProvider"
+            ]
+        }
+    }
+}

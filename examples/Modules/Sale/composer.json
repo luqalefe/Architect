@@ -1,0 +1,17 @@
+{
+    "name": "modules/sale",
+    "description": "Sales bounded context (example reference module).",
+    "type": "laravel-module",
+    "autoload": {
+        "psr-4": {
+            "Modules\\Sale\\": ""
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Sale\\Infrastructure\\Providers\\SaleServiceProvider"
+            ]
+        }
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "name": "Sale",
+    "alias": "sale",
+    "description": "Sales bounded context — manages orders, invoices and the sale lifecycle.",
+    "priority": 0,
+    "version": "1.0.0",
+    "providers": [
+        "Modules\\Sale\\Infrastructure\\Providers\\SaleServiceProvider"
+    ],
+    "contracts": {
+        "publishes": [
+            "Modules\\Sale\\Contracts\\SaleOrderContract"
+        ]
+    },
+    "events": {
+        "publishes": [
+            "Modules\\Sale\\Contracts\\Events\\SaleOrderCompleted"
+        ],
+        "subscribes": [
+            "Modules\\Crm\\Contracts\\Events\\LeadConverted"
+        ]
+    },
+    "dependencies": {
+        "required": [],
+        "optional": [
+            "Crm"
+        ]
+    }
+}
