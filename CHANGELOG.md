@@ -47,7 +47,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - `arch:make-state {Module/Name}` — generates an enum at `Domain/Enums/` with `canTransitionTo()` AND a throwing `transitionTo()` (richer variant of `arch:make-enum`).
 - `arch:make-validator {Module/Name}` — generates `Application/Validators/{Name}Rules.php` (the `Rules` suffix is appended automatically) with a static `rules()` method.
 
+### Added — Increment 5 (Cross-Context Generators)
+- `arch:make-contract {Module/Name}` — generates a public `interface` under `Contracts/` AND appends its FQCN to `module.json → contracts.publishes`.
+- `arch:make-integration-event {Module/Name}` — generates a `final readonly` POPO under `Contracts/Events/` AND appends to `module.json → events.publishes`.
+- `arch:make-acl-listener {Module/Name} --for=Module/EventName` — generates an Anti-Corruption Layer listener under `Infrastructure/ACL/`, appends to `module.json → events.subscribes`, AND wires `Event::listen()` in the ServiceProvider between `// @arch-listeners-start` / `// @arch-listeners-end` markers. Refuses when `--for` targets a Domain Event under `Domain/Events/` (cross-module subscribers must consume Integration Events only). Idempotent on all three side effects.
+- `LaravelModulesArch\Support\ManifestUpdater` — appends string entries to dot-paths inside `module.json` idempotently, validating the result via `ModuleJsonSchema` and rewriting pretty-printed.
+- `LaravelModulesArch\Support\ManifestUpdateResult` — typed result with `wasAdded()` / `isValid()`.
+- `AbstractMakeArtifactCommand::manifestUpdate()` — hook for subclasses to declare a `[dotPath, entry]` tuple, automatically run after the file is generated.
+
 ### Changed
 - PHPStan invocation uses `--memory-limit=1G` (the default 128M blew up while booting Larastan).
 - `composer.json` requires `justinrainbow/json-schema ^5.3|^6.0`.
-- Module `ServiceProvider` stub now ships with `// @arch-bindings-start` / `// @arch-bindings-end` markers so `arch:make-repository` can inject bindings deterministically.
+- Module `ServiceProvider` stub now ships with `// @arch-bindings-start` / `// @arch-bindings-end` markers so `arch:make-repository` can inject bindings deterministically, AND `// @arch-listeners-start` / `// @arch-listeners-end` markers for `arch:make-acl-listener`.

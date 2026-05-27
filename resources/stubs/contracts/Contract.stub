@@ -1,0 +1,20 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Contracts;
+
+/**
+ * Public contract: {{ NAME }}
+ *
+ * Part of the {{ MODULE }} module's public API. Other modules MAY depend on
+ * this interface — everything outside Contracts/ is private to {{ MODULE }}.
+ *
+ * Declared in module.json → contracts.publishes.
+ *
+ * @see "Domain-Driven Design" (Evans), Cap. 14 — Open Host Service
+ */
+interface {{ NAME }}
+{
+    // TODO: declare the public methods exposed by this contract
+}

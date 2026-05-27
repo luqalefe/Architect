@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Contracts\Events;
+
+/**
+ * Integration Event: {{ NAME }}
+ *
+ * Part of the {{ MODULE }} module's public event API. Other modules MAY listen
+ * to this event through an Anti-Corruption Layer (Infrastructure/ACL).
+ *
+ * Contains only serializable primitives so it can survive a queue round-trip.
+ * Declared in module.json → events.publishes.
+ *
+ * @see "Implementing DDD" (Vernon), Cap. 8 — Integration Events
+ */
+final readonly class {{ NAME }}
+{
+    public function __construct(
+        // TODO: add event payload — primitives only (strings, ints, dates as ISO 8601 strings)
+    ) {}
+}

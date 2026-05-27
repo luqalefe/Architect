@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace LaravelModulesArch;
 
 use Illuminate\Support\ServiceProvider;
+use LaravelModulesArch\Console\Commands\MakeAclListenerCommand;
 use LaravelModulesArch\Console\Commands\MakeActionCommand;
+use LaravelModulesArch\Console\Commands\MakeContractCommand;
 use LaravelModulesArch\Console\Commands\MakeDtoCommand;
 use LaravelModulesArch\Console\Commands\MakeEntityCommand;
 use LaravelModulesArch\Console\Commands\MakeEnumCommand;
 use LaravelModulesArch\Console\Commands\MakeEventCommand;
 use LaravelModulesArch\Console\Commands\MakeExceptionCommand;
+use LaravelModulesArch\Console\Commands\MakeIntegrationEventCommand;
 use LaravelModulesArch\Console\Commands\MakeModuleCommand;
 use LaravelModulesArch\Console\Commands\MakeRepositoryCommand;
 use LaravelModulesArch\Console\Commands\MakeStateCommand;
@@ -57,6 +60,9 @@ class LaravelModulesArchServiceProvider extends ServiceProvider
             MakeViewModelCommand::class,
             MakeStateCommand::class,
             MakeValidatorCommand::class,
+            MakeContractCommand::class,
+            MakeIntegrationEventCommand::class,
+            MakeAclListenerCommand::class,
         ];
     }
 }

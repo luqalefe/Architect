@@ -7,6 +7,7 @@ namespace LaravelModulesArch\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use LaravelModulesArch\Console\Concerns\ParsesModuleAndName;
+use LaravelModulesArch\Support\ManifestUpdater;
 use LaravelModulesArch\Support\ModuleNaming;
 use LaravelModulesArch\Support\StubRenderer;
 
@@ -38,7 +39,19 @@ abstract class AbstractMakeArtifactCommand extends Command
      */
     abstract protected function artifactKind(): string;
 
-    public function handle(Filesystem $files, StubRenderer $renderer): int
+    /**
+     * Subclasses may return a [dotPath, entry] tuple to declare this artifact
+     * in the module's module.json (e.g. ['contracts.publishes', 'Modules\Sale\Contracts\Foo']).
+     * Default returns null — no manifest update is performed.
+     *
+     * @return array{string, string}|null
+     */
+    protected function manifestUpdate(string $module, string $name): ?array
+    {
+        return null;
+    }
+
+    public function handle(Filesystem $files, StubRenderer $renderer, ManifestUpdater $manifest): int
     {
         $argument = $this->argument('name');
         if (! is_string($argument) || $argument === '') {
@@ -79,6 +92,22 @@ abstract class AbstractMakeArtifactCommand extends Command
         $files->put($outputPath, $renderer->renderFile($this->stubPath(), $replacements));
 
         $this->components->info(sprintf('%s created: %s', $this->artifactKind(), $outputPath));
+
+        $update = $this->manifestUpdate($module, $name);
+        if ($update !== null) {
+            [$dotPath, $entry] = $update;
+            $result = $manifest->addToList($modulePath.'/module.json', $dotPath, $entry);
+
+            if (! $result->isValid()) {
+                $this->components->error('module.json failed schema validation after update: '.$result->validation->summary());
+
+                return self::FAILURE;
+            }
+
+            $this->components->info($result->wasAdded()
+                ? sprintf('module.json updated: %s += %s', $dotPath, $entry)
+                : sprintf('module.json already contained %s in %s — skipped.', $entry, $dotPath));
+        }
 
         return self::SUCCESS;
     }

@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Infrastructure\ACL;
+
+use {{ EVENT_FQCN }};
+
+/**
+ * Anti-Corruption Layer: {{ NAME }}
+ *
+ * Translates the external event {@see {{ EVENT_CLASS }}} into an operation
+ * expressed in {{ MODULE }}'s own vocabulary. Keeps external concepts from
+ * leaking into the {{ MODULE }} domain — only primitives cross the boundary.
+ *
+ * @see "Domain-Driven Design" (Evans), Cap. 14 — Anti-Corruption Layer
+ */
+final class {{ NAME }}
+{
+    public function __construct(
+        // TODO: inject the internal Action this listener forwards the event to
+    ) {}
+
+    public function handle({{ EVENT_CLASS }} $event): void
+    {
+        // TODO: translate $event payload into a call on the injected Action
+    }
+}

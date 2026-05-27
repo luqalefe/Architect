@@ -26,6 +26,9 @@ class {{ NAME }}ServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../../../routes/api.php');
         $this->loadMigrationsFrom(__DIR__.'/../../../database/migrations');
         $this->loadViewsFrom(__DIR__.'/../../../resources/views', '{{ ALIAS }}');
+
+        // @arch-listeners-start
+        // @arch-listeners-end
     }
 
     /**
