@@ -4,6 +4,26 @@
 
 ---
 
+## Status
+
+**Todos os 9 incrementos foram concluídos. Release: `v1.0.0` (2026-05-27).**
+
+| # | Incremento | Status | Commit |
+|---|---|---|---|
+| 0 | Skeleton do pacote | concluído | [`792187b`](../../commit/792187b) |
+| 1 | Primitivas de modularização | concluído | [`960e4f7`](../../commit/960e4f7) |
+| 2 | `arch:make-module` + schema | concluído | [`1d960d3`](../../commit/1d960d3) |
+| 3 | Geradores Domain | concluído | [`cca6d3d`](../../commit/cca6d3d) |
+| 4 | Geradores Application | concluído | [`3885d2b`](../../commit/3885d2b) |
+| 5 | Geradores cross-context | concluído | [`aa9acf3`](../../commit/aa9acf3) |
+| 6 | `arch:check-boundaries` (R1-R6) | concluído | [`d1c8712`](../../commit/d1c8712) |
+| 7 | Testing utilities | concluído | [`b2da506`](../../commit/b2da506) |
+| 8 | Exemplo Sale/Crm + release v1.0.0 | concluído | [`81fb432`](../../commit/81fb432) + [`bf68da5`](../../commit/bf68da5) |
+
+**Métricas finais:** 175 testes verdes, PHPStan level 8 limpo, Pint limpo, CI matrix PHP 8.2/8.3/8.4 × Laravel 11/12.
+
+---
+
 ## Visão Geral
 
 ```mermaid

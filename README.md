@@ -176,6 +176,17 @@ class SaleModuleTest extends IsolatedModuleTest
 
 ## Documentation
 
+### Deep dives
+
+| Document | Purpose |
+|---|---|
+| [docs/configuration.md](./docs/configuration.md) | Full `config/modules-arch.php` reference + recipes |
+| [docs/rules.md](./docs/rules.md) | R1-R6 with valid/invalid examples and how to fix each |
+| [docs/generators.md](./docs/generators.md) | Every `arch:make-*` command with output paths and side effects |
+| [docs/testing.md](./docs/testing.md) | `IsolatedModuleTest`, `MocksCrossModuleActions`, `AssertsModuleBoundaries` with full scenarios |
+
+### Design + roadmap
+
 | Document | Purpose |
 |---|---|
 | [Design Spec](./extension_complete_reference.md) | Every feature mapped to the DDD principle it implements |

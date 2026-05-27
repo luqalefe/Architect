@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- `docs/` directory with deep-dive guides: `configuration.md` (full config reference + recipes), `rules.md` (R1-R6 with valid/invalid examples), `generators.md` (catalogue of all 15 `arch:make-*` commands with output paths and side effects), `testing.md` (full scenarios for the three testing utilities).
+- README now links the new `docs/` guides under a dedicated "Deep dives" section.
+- `SPRINTS.md` status header showing all 9 increments concluded with their commit hashes.
+
 ## [1.0.0] - 2026-05-27
 
 First stable release. Covers the full MVP scoped in [SPRINTS.md](./SPRINTS.md)
