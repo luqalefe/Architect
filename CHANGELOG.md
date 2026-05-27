@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-05-27
+
+First stable release. Covers the full MVP scoped in [SPRINTS.md](./SPRINTS.md)
+(increments 0 through 8): primitives, generators for every layer,
+cross-context coordination, boundary enforcement, testing utilities, and a
+reference Sale + Crm module that passes `arch:check-boundaries --strict`.
+
+**Headlines:**
+- 16 Artisan commands covering scaffolding (15× `arch:make-*`) and
+  enforcement (`arch:check-boundaries`).
+- 6 boundary rules (R1-R6) shipping in pragmatic-default config; toggleable
+  individually.
+- `module.json` schema (JSON Schema draft-07) with permissive root for
+  nwidart-specific keys.
+- Reference `examples/Modules/Sale/` + minimal `examples/Modules/Crm/`,
+  asserted in CI to pass `arch:check-boundaries --strict`.
+- Testing utilities (`IsolatedModuleTest`, `MocksCrossModuleActions`,
+  `AssertsModuleBoundaries`) so apps using the package can write tests in
+  the same idioms.
+- CI matrix: PHP 8.2/8.3/8.4 × Laravel 11/12.
+
 ### Added — Increment 0 (Package Skeleton)
 - Composer package definition with PSR-4 autoload (`LaravelModulesArch\` → `src/`).
 - `LaravelModulesArchServiceProvider` registered via Laravel auto-discovery.
