@@ -40,6 +40,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - `LaravelModulesArch\Console\Concerns\ParsesModuleAndName` — shared trait that parses the `Module/Name` argument and emits consistent error messages.
 - `LaravelModulesArch\Console\Commands\AbstractMakeArtifactCommand` — base class for single-file generators; subclasses only declare `stubPath()`, `outputSubPath()`, `artifactKind()`.
 
+### Added — Increment 4 (Application Generators)
+- `arch:make-action {Module/Name}` — generates a `final` Application Service / Use Case stub with a constructor for DI and `handle()` placeholder.
+- `arch:make-dto {Module/Name}` — generates a `final readonly` Data Transfer Object with `fromRequest()` and `fromArray()` named factories.
+- `arch:make-view-model {Module/Name}` — generates a ViewModel that exposes view-facing methods (not raw properties).
+- `arch:make-state {Module/Name}` — generates an enum at `Domain/Enums/` with `canTransitionTo()` AND a throwing `transitionTo()` (richer variant of `arch:make-enum`).
+- `arch:make-validator {Module/Name}` — generates `Application/Validators/{Name}Rules.php` (the `Rules` suffix is appended automatically) with a static `rules()` method.
+
 ### Changed
 - PHPStan invocation uses `--memory-limit=1G` (the default 128M blew up while booting Larastan).
 - `composer.json` requires `justinrainbow/json-schema ^5.3|^6.0`.

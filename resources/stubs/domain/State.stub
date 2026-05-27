@@ -1,0 +1,44 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Domain\Enums;
+
+use DomainException;
+
+/**
+ * State enum: {{ NAME }}
+ *
+ * Like a plain enum but with first-class transitions: transitionTo() validates
+ * the move and throws DomainException when the (source, target) pair isn't
+ * allowed by canTransitionTo().
+ *
+ * @see "Laravel Beyond CRUD" (Spatie), Cap. 6 — The State Pattern
+ * @see "Domain-Driven Design" (Evans), Cap. 5 — Entity lifecycle
+ */
+enum {{ NAME }}: string
+{
+    case Draft = 'draft';
+    // TODO: declare additional cases
+
+    public function canTransitionTo(self $target): bool
+    {
+        return match ($this) {
+            self::Draft => false,
+            // TODO: define valid transitions per state
+        };
+    }
+
+    public function transitionTo(self $target): self
+    {
+        if (! $this->canTransitionTo($target)) {
+            throw new DomainException(sprintf(
+                'Invalid {{ NAME }} transition: %s → %s.',
+                $this->value,
+                $target->value,
+            ));
+        }
+
+        return $target;
+    }
+}

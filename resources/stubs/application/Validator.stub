@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Application\Validators;
+
+/**
+ * Validation rules: {{ NAME }}Rules
+ *
+ * APPLICATION-level rules (rules that need the framework — `exists:table`,
+ * `unique`, etc.). DOMAIN invariants (e.g. "total must be non-negative")
+ * belong in the relevant Value Object instead.
+ */
+final class {{ NAME }}Rules
+{
+    /**
+     * @return array<string, array<int, string>>
+     */
+    public static function rules(): array
+    {
+        return [
+            // 'field' => ['required', 'string', 'max:255'],
+        ];
+    }
+}

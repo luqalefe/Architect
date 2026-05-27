@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Application\ViewModels;
+
+/**
+ * ViewModel: {{ NAME }}
+ *
+ * Prepares data EXCLUSIVELY for presentation. Exposes methods (not raw
+ * properties) so the view consumes a stable contract while the underlying
+ * domain shape can keep evolving.
+ *
+ * @see "Laravel Beyond CRUD" (Spatie), Cap. 5 — View Models
+ */
+final class {{ NAME }}
+{
+    public function __construct(
+        // TODO: inject raw domain data (entities, collections, paginators)
+    ) {}
+
+    // TODO: expose view-facing methods, e.g.
+    //  public function items(): array { return ...; }
+    //  public function totalFormatted(): string { return 'R$ '.number_format(...); }
+}

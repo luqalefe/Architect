@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Application\DTOs;
+
+use Illuminate\Http\Request;
+
+/**
+ * Data Transfer Object: {{ NAME }}
+ *
+ * Typed structure for moving data between layers. The named factories below
+ * keep the conversion HTTP-aware on the edge so the Action receives a plain
+ * value object regardless of where it was invoked from (HTTP, CLI, queue,
+ * another module).
+ *
+ * @see "Laravel Beyond CRUD" (Spatie), Cap. 2 — DTOs
+ */
+final readonly class {{ NAME }}
+{
+    public function __construct(
+        // TODO: declare typed properties (use 'public readonly' to expose them)
+    ) {}
+
+    public static function fromRequest(Request $request): self
+    {
+        return self::fromArray($request->all());
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     */
+    public static function fromArray(array $data): self
+    {
+        return new self(
+            // TODO: map array keys to constructor parameters
+        );
+    }
+}

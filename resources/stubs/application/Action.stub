@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Application\Actions;
+
+/**
+ * Application Service / Use Case: {{ NAME }}
+ *
+ * Coordinates a complete operation: receives a DTO, invokes domain logic,
+ * persists via Repository, dispatches events. NEVER contains business rules —
+ * those belong in the Domain layer.
+ *
+ * @see "Implementing DDD" (Vernon), Cap. 14 — Application
+ * @see "Laravel Beyond CRUD" (Spatie), Cap. 4 — Actions
+ */
+final class {{ NAME }}
+{
+    public function __construct(
+        // TODO: inject repositories / domain services / clock here
+    ) {}
+
+    public function handle(/* DTO $data */): mixed
+    {
+        // TODO: implement the use case
+    }
+}
