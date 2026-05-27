@@ -8,4 +8,11 @@ parameters:
         - tests
     excludePaths:
         - vendor
+    ignoreErrors:
+        # Mockery's ->shouldReceive() returns a union (ExpectationInterface|HigherOrderMessage)
+        # whose methods PHPStan cannot fully narrow. Acceptable in tests only.
+        -
+            message: '#Call to an undefined method Mockery\\#'
+            paths:
+                - tests/*
     tmpDir: .phpstan.cache
