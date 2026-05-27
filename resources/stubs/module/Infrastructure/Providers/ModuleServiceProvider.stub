@@ -1,0 +1,39 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ NAMESPACE }}\Infrastructure\Providers;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\ServiceProvider;
+use LaravelModulesArch\Concerns\RegistersModuleMorphMap;
+
+class {{ NAME }}ServiceProvider extends ServiceProvider
+{
+    use RegistersModuleMorphMap;
+
+    public function register(): void
+    {
+        // Bind {{ NAME }} Repository interfaces to their concrete implementations here.
+    }
+
+    public function boot(): void
+    {
+        $this->bootModuleMorphMap();
+
+        $this->loadRoutesFrom(__DIR__.'/../../../routes/web.php');
+        $this->loadRoutesFrom(__DIR__.'/../../../routes/api.php');
+        $this->loadMigrationsFrom(__DIR__.'/../../../database/migrations');
+        $this->loadViewsFrom(__DIR__.'/../../../resources/views', '{{ ALIAS }}');
+    }
+
+    /**
+     * @return array<string, class-string<Model>>
+     */
+    protected function morphMap(): array
+    {
+        return [
+            // '{{ ALIAS }}_order' => Modules\{{ NAME }}\Infrastructure\Persistence\Models\Order::class,
+        ];
+    }
+}

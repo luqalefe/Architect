@@ -1,0 +1,17 @@
+{
+    "name": "modules/{{ ALIAS }}",
+    "description": "{{ DESCRIPTION }}",
+    "type": "laravel-module",
+    "autoload": {
+        "psr-4": {
+            "{{ NAMESPACE_JSON }}\\": ""
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "{{ NAMESPACE_JSON }}\\Infrastructure\\Providers\\{{ NAME }}ServiceProvider"
+            ]
+        }
+    }
+}

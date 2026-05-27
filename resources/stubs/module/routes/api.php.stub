@@ -1,0 +1,12 @@
+<?php
+
+declare(strict_types=1);
+
+use Illuminate\Support\Facades\Route;
+
+Route::middleware('api')
+    ->prefix('api/{{ ALIAS }}')
+    ->name('api.{{ ALIAS }}.')
+    ->group(function () {
+        // API routes for the {{ NAME }} module.
+    });

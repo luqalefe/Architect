@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaravelModulesArch;
 
 use Illuminate\Support\ServiceProvider;
+use LaravelModulesArch\Console\Commands\MakeModuleCommand;
 
 class LaravelModulesArchServiceProvider extends ServiceProvider
 {
@@ -33,7 +34,7 @@ class LaravelModulesArchServiceProvider extends ServiceProvider
     protected function consoleCommands(): array
     {
         return [
-            // Console commands are registered by subsequent increments.
+            MakeModuleCommand::class,
         ];
     }
 }

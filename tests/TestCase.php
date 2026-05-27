@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaravelModulesArch\Tests;
 
 use Illuminate\Foundation\Application;
+use Illuminate\Testing\PendingCommand;
 use LaravelModulesArch\LaravelModulesArchServiceProvider;
 use Mockery;
 use Mockery\MockInterface;
@@ -49,5 +50,22 @@ abstract class TestCase extends Orchestra
         $mock = Mockery::mock();
         $configure($mock);
         $this->app()->instance('modules', $mock);
+    }
+
+    /**
+     * Typed wrapper over $this->artisan() — Laravel returns PendingCommand|int
+     * and PHPStan can't narrow the union, so this asserts the expected branch
+     * (mocked console output) and hands back a PendingCommand.
+     *
+     * @param  array<string, mixed>  $parameters
+     */
+    protected function artisanPending(string $command, array $parameters = []): PendingCommand
+    {
+        $result = $this->artisan($command, $parameters);
+        if (! $result instanceof PendingCommand) {
+            throw new RuntimeException('artisan() returned an int. mockConsoleOutput must be enabled for this helper.');
+        }
+
+        return $result;
     }
 }

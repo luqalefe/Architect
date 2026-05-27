@@ -1,0 +1,21 @@
+{
+    "name": "{{ NAME }}",
+    "alias": "{{ ALIAS }}",
+    "description": "{{ DESCRIPTION }}",
+    "priority": 0,
+    "version": "1.0.0",
+    "providers": [
+        "{{ NAMESPACE_JSON }}\\Infrastructure\\Providers\\{{ NAME }}ServiceProvider"
+    ],
+    "contracts": {
+        "publishes": []
+    },
+    "events": {
+        "publishes": [],
+        "subscribes": []
+    },
+    "dependencies": {
+        "required": [],
+        "optional": []
+    }
+}
